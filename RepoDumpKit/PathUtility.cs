@@ -1,4 +1,4 @@
-namespace SolutionScannerX;
+namespace RepoDumpKit;
 
 internal static class PathUtility
 {

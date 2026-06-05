@@ -1,9 +1,9 @@
-# SolutionScannerX
+# RepoDumpKit
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![.NET](https://img.shields.io/badge/.NET-10.0-blue.svg)
 
-SolutionScannerX is a small .NET console tool that creates AI-friendly text dumps of C#/.NET solution or repository folders.
+RepoDumpKit is a small .NET console tool that creates AI-friendly text dumps of C#/.NET solution or repository folders.
 
 It scans a repository, includes readable text files, excludes binary/build/generated content, records Git-ignored paths, and writes a structured `.txt` dump designed for code review, debugging, refactoring, and AI-assisted navigation.
 
@@ -40,7 +40,7 @@ RepositoryName-yyyyMMddHHmmss.txt
 Example:
 
 ```text
-SolutionScannerX-20260508190701.txt
+RepoDumpKit-20260508190701.txt
 ```
 
 ## Requirements
@@ -54,7 +54,7 @@ The current implementation invokes `cmd.exe` for Git ignore discovery, so Window
 ## Build
 
 ```bash
-dotnet build SolutionScannerX.slnx
+dotnet build RepoDumpKit.slnx
 ```
 
 ## Run
@@ -62,13 +62,13 @@ dotnet build SolutionScannerX.slnx
 Run with an explicit repository path:
 
 ```bash
-dotnet run --project SolutionScannerX -- "C:\Path\To\Repository"
+dotnet run --project RepoDumpKit -- "C:\Path\To\Repository"
 ```
 
 Or run without arguments and enter the repository path when prompted:
 
 ```bash
-dotnet run --project SolutionScannerX
+dotnet run --project RepoDumpKit
 ```
 
 The selected path is stored in:
@@ -82,13 +82,13 @@ When the app is run again, it offers to reuse the saved path.
 ## Publish
 
 ```bash
-dotnet publish SolutionScannerX/SolutionScannerX.csproj --configuration Release
+dotnet publish RepoDumpKit/RepoDumpKit.csproj --configuration Release
 ```
 
 The included publish profile writes to:
 
 ```text
-SolutionScannerX/bin/Release/net10.0/publish/
+RepoDumpKit/bin/Release/net10.0/publish/
 ```
 
 ## How it works

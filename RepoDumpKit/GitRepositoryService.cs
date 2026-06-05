@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace SolutionScannerX;
+namespace RepoDumpKit;
 
 internal static class GitRepositoryService
 {

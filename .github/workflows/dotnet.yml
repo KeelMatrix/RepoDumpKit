@@ -20,7 +20,7 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Restore
-        run: dotnet restore SolutionScannerX.slnx
+        run: dotnet restore RepoDumpKit.slnx
 
       - name: Build
-        run: dotnet build SolutionScannerX.slnx --configuration Release --no-restore
+        run: dotnet build RepoDumpKit.slnx --configuration Release --no-restore

@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace SolutionScannerX;
+namespace RepoDumpKit;
 
 internal static class ProcessRunner
 {

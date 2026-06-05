@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SolutionScannerX;
+namespace RepoDumpKit;
 
 internal static class FileAnalysisService
 {

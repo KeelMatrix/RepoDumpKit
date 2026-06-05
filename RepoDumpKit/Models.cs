@@ -1,4 +1,4 @@
-namespace SolutionScannerX;
+namespace RepoDumpKit;
 
 internal sealed record FileEntry(string FullPath, string RelativePath);
 

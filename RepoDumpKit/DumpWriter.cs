@@ -1,4 +1,4 @@
-namespace SolutionScannerX;
+namespace RepoDumpKit;
 
 internal static class DumpWriter
 {
@@ -260,7 +260,7 @@ internal static class DumpWriter
         }
         else
         {
-            await writer.WriteLineAsync($"000001 | [SOLUTIONSCANNERX_READ_ERROR] {readResult.ErrorMessage}");
+            await writer.WriteLineAsync($"000001 | [REPODUMPKIT_READ_ERROR] {readResult.ErrorMessage}");
         }
 
         await writer.WriteLineAsync("========== CONTENT END ==========");
