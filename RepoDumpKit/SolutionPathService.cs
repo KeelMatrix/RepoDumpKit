@@ -20,29 +20,45 @@ internal static class SolutionPathService
             return argumentPath;
         }
 
-        string? existingPath = ReadSavedPath(configFilePath);
+        IReadOnlyList<string> savedPaths = ReadSavedPaths(configFilePath);
 
-        if (!string.IsNullOrWhiteSpace(existingPath))
+        if (savedPaths.Count > 0)
         {
-            Console.WriteLine($"Saved path: {existingPath}");
-            Console.Write("Press Enter to use it, or type a new path: ");
-            string? typed = Console.ReadLine();
+            Console.WriteLine("Recent paths:");
 
-            if (string.IsNullOrWhiteSpace(typed))
+            for (int index = 0; index < savedPaths.Count; index++)
             {
-                return existingPath;
+                Console.WriteLine($"{index + 1}. {savedPaths[index]}");
             }
 
-            string newTyped = typed.Trim();
+            Console.Write("Choose a number, press Enter for 1, or paste a new path: ");
 
-            while (!Directory.Exists(newTyped))
+            while (true)
             {
-                Console.Write("Invalid path. Enter a valid full path: ");
-                newTyped = (Console.ReadLine() ?? string.Empty).Trim();
-            }
+                string typed = (Console.ReadLine() ?? string.Empty).Trim();
+                string selectedPath;
 
-            SavePath(configFilePath, newTyped);
-            return newTyped;
+                if (string.IsNullOrWhiteSpace(typed))
+                {
+                    selectedPath = savedPaths[0];
+                }
+                else if (TryGetSavedPathByNumber(typed, savedPaths, out string? savedPath))
+                {
+                    selectedPath = savedPath;
+                }
+                else
+                {
+                    selectedPath = typed;
+                }
+
+                if (Directory.Exists(selectedPath))
+                {
+                    SavePath(configFilePath, selectedPath);
+                    return selectedPath;
+                }
+
+                Console.Write("Invalid path. Choose a listed number or enter a valid full path: ");
+            }
         }
 
         while (true)
@@ -60,37 +76,82 @@ internal static class SolutionPathService
         }
     }
 
-    private static string? ReadSavedPath(string configFilePath)
+    private static IReadOnlyList<string> ReadSavedPaths(string configFilePath)
     {
         if (!File.Exists(configFilePath))
         {
-            return null;
+            return [];
         }
 
         try
         {
-            string existingPath = File.ReadAllText(configFilePath).Trim();
+            string[] storedPaths = File.ReadAllLines(configFilePath);
+            List<string> validPaths = [];
+            HashSet<string> seenPaths = new(AppSettings.PathComparer);
 
-            if (Directory.Exists(existingPath))
+            foreach (string storedPath in storedPaths)
             {
-                return existingPath;
+                string path = storedPath.Trim();
+
+                if (string.IsNullOrWhiteSpace(path) || !seenPaths.Add(path))
+                {
+                    continue;
+                }
+
+                if (Directory.Exists(path))
+                {
+                    validPaths.Add(path);
+
+                    if (validPaths.Count == AppSettings.MaxSavedSolutionPaths)
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Stored path '{path}' not found or is invalid.");
+                }
             }
 
-            Console.WriteLine($"Stored path '{existingPath}' not found or is invalid.");
-            return null;
+            return validPaths;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error reading config file: {ex.GetType().Name}: {ex.Message}");
-            return null;
+            return [];
         }
+    }
+
+    private static bool TryGetSavedPathByNumber(string input, IReadOnlyList<string> savedPaths, out string? savedPath)
+    {
+        savedPath = null;
+
+        if (!int.TryParse(input, out int selectedNumber))
+        {
+            return false;
+        }
+
+        if (selectedNumber < 1 || selectedNumber > savedPaths.Count)
+        {
+            return false;
+        }
+
+        savedPath = savedPaths[selectedNumber - 1];
+        return true;
     }
 
     private static void SavePath(string configFilePath, string path)
     {
         try
         {
-            File.WriteAllText(configFilePath, path);
+            string fullPath = Path.GetFullPath(path.Trim());
+            List<string> savedPaths = ReadSavedPaths(configFilePath)
+                .Where(savedPath => !string.Equals(savedPath, fullPath, AppSettings.PathComparison))
+                .Prepend(fullPath)
+                .Take(AppSettings.MaxSavedSolutionPaths)
+                .ToList();
+
+            File.WriteAllLines(configFilePath, savedPaths);
             Console.WriteLine($"Path saved to {configFilePath}");
         }
         catch (Exception ex)
