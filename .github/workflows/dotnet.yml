@@ -24,3 +24,6 @@ jobs:
 
       - name: Build
         run: dotnet build RepoDumpKit.slnx --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test RepoDumpKit.slnx --configuration Release --no-build --verbosity normal
