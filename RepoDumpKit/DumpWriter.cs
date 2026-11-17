@@ -89,6 +89,7 @@ internal static class DumpWriter
         await writer.WriteLineAsync("7. .gitignore files tracked by git are intentionally included even if ignore matching would otherwise exclude them.");
         await writer.WriteLineAsync("8. The preserved git ignored-file command is listed in the NOT INCLUDED section.");
         await writer.WriteLineAsync("9. Remove the fixed-width line-number prefix before applying patches or reconstructing a source file from this dump.");
+        await writer.WriteLineAsync("10. Dumps may use CRLF line endings on Windows. For end-anchored regex searches (such as ^RELATIVE_PATH: ...$), use CRLF-aware matching or normalize to LF to avoid false negatives.");
         await writer.WriteLineAsync();
         await writer.WriteLineAsync("RECOMMENDED_AI_WORKFLOW:");
         await writer.WriteLineAsync("1. Read this header.");

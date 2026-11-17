@@ -20,6 +20,7 @@ public sealed class DumpWriterTests
 
         Assert.Contains("========== DUMP START ==========" , output);
         Assert.Contains("FORMAT_VERSION: " + AppSettings.DumpFormatVersion, output);
+        Assert.Contains("10. Dumps may use CRLF line endings on Windows. For end-anchored regex searches (such as ^RELATIVE_PATH: ...$), use CRLF-aware matching or normalize to LF to avoid false negatives.", output);
         Assert.Contains("========== SECTION START: DIRECTORY TREE ==========", output);
         Assert.Contains("GIT_IGNORED_PATHS_START", output);
         Assert.Contains("bin/app.dll", output);
